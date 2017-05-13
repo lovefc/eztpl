@@ -6,15 +6,14 @@ Quick usage, easy syntax, very efficient, free to define template syntax, only o
 
 If you notice compliance oversights, please send a patch.
 
-```php 
-<?php
+# Composer
 
-$obj = src\Eztpl::instance();
-
-$obj->assign('hello', $world);
-    
-$obj->display('index');
-
+```
+{
+    "require": {
+        "eztpl/eztpl": "1.6.7"
+    }		
+}
 ```
 
 # Requirements
