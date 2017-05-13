@@ -1,10 +1,10 @@
 ![](http://104.224.175.51/eztpl.png)
 
-A very small PHP template engine class library
+A very small PHP template engine class library.
 
 Quick usage, easy syntax, very efficient, free to define template syntax, only one file at the core!
 
-If you notice compliance oversights, please send a patch 
+If you notice compliance oversights, please send a patch.
 
 ```php 
 <?php
@@ -21,15 +21,14 @@ $obj->display('index');
 
 The following versions of PHP are supported by this version.
 
-PHP 5.4
+* PHP 5.4
 
-PHP 5.5
+* PHP 5.5
 
-PHP 5.6
+* PHP 5.6
 
-PHP 7.0
+* PHP 7.0
 
-PHP 7.1
 
 # License
 
