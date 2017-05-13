@@ -1,0 +1,114 @@
+<b>[1]</b> <br />
+{($a=123456)}
+Output: {($a)} <br />
+<br />
+Sometimes not output, you can add in front! For example, perform some functions or methods that do not return values
+<br />
+<br />
+No output: {(!$a)}
+<br />
+<br />
+
+<b>[2]</b>
+<br />
+{(include file="a")}
+<br />
+<br />
+The above is a reference to the a.t pl template, which can also be referenced except for the reference template
+<br />
+For example.
+<br />
+<br />
+{(include file="./include.php")}
+<br />
+<br />
+
+<b>[3]</b>
+ <br />
+Sometimes we need to assign a value to an array, which is the same as in PHP, which is the same <br />
+{($m[] = "hello")} <br />
+Array output: {($m.0)} <br />
+<br />
+If it's not a multidimensional array, you can use the.
+$m. 0 is equal to $m [0], and of course, $m [0], for example, the multidimensional array must be used [], for example $m [0] [1], which cannot be written as $m. 0.1
+<br />
+<br />
+<br />
+<br />
+
+<b>[4]</b>
+<br />
+The loop function is one of the most common functions we use, and it plays a huge role in database paging and display
+<br />
+Foreach loop: <br />
+This is a function that we normally use to go through the various groups
+There are two methods of use in the template.
+<br />
+Example a
+<br />
+{($arr = array (1, 2, 3, 4, 5))}
+{(foreach $arr)}
+{($key)} : {($value)} <br />
+{(/foreach)}
+<br />
+Above only wrote one parameter, foreach can have three parameters, it is a kind of simple notation, in the inner loop, $key represents the key value, $value represents an array of values, this is the default definitions, you can define your own, see example 2
+<br />
+<br />
+Example 2: <br />
+{($arr=array (1, 2, 3, 4, 5))}
+{(foreach $arr as $a=>$b)}
+{($a)} : {($b)} <br />
+{(/foreach)}
+<br />
+<br />
+The following other cycles are used
+<br />
+<br />
+While loop <br />
+Example: <br />
+{($i=0)}
+{(while $i<10)}
+{($i++)} <br />
+{(/while)}
+<br />
+<br />
+For loop <br />
+Example: <br />
+{(for $i=0;$i<10;$i++)}
+{($i)} <br />
+{(/for)} <br />
+<br />
+
+<b>[5]</b>
+ <br />
+If judgment
+<br />
+{($f=123)}
+{(if isset($f))}
+$f is not empty
+{(/if)}
+<br />
+<br />
+
+<b>[6]</b>
+<br />
+{(if $get.a==null)}
+The $get['a'] in the template represents $get['a'], $post represents $post, these are global variables,
+
+<br />
+<a href="./index.php?a=123 "> clicks the value of $get['a'] at 123 </a>
+{(elseif $get.a==123)}
+$get['a'] is equal to 123 <br />
+<br />
+<a href="./index.php?a="> clicks this change for $get ['a'] for empty </a>
+{(/if)}
+<br />
+<br />
+<br />
+
+<b>[7]</b>
+<br / >
+Custom replace <br /> <br />
+[md5(12345)] <br />
+Use this tag to use the md5 encryption string <br /> <br />
+Output time: [time]
