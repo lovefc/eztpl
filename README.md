@@ -1,4 +1,4 @@
-![](http://104.224.175.51/eztpl.png)
+![](http://www.eztpl.com/eztpl.png)
 
 A very small PHP template engine class library.
 
