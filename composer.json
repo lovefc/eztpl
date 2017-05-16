@@ -17,6 +17,6 @@
       }
     ],
 	"autoload": {
-	   "psr-0": { "eztpl\\": "src"}
+	   "psr-4": { "eztpl\\": "src"}
 	}
 }
