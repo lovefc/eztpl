@@ -54,7 +54,7 @@ $setting = array(
 try {
     
     // get a singleton
-    $obj = src\Eztpl::instance();
+    $obj = eztpl\Eztpl::instance();
     
     // To configure
     $obj->config($setting);

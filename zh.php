@@ -49,7 +49,7 @@ $setting = array(
 try{
 	
 //获取单例
-$obj = src\Eztpl::instance();
+$obj = eztpl\Eztpl::instance();
 
 //传入配置
 $obj->config($setting);
