@@ -68,13 +68,12 @@ class Eztpl
     //Get the compiling file path
     protected function get_compiledfile_url($file_name)
     {
-        return $compiledfile_url = (!empty($this->tempdirname)) ? $this->tempdirs . '/' . $this->tempdirname . '/' . $file_name . '.php' :        $this->tempdirs . '/' . $file_name . '.php';
+        return (!empty($this->tempdirname)) ? $this->tempdirs . '/' . $this->tempdirname . '/' . $file_name . '.php' :        $this->tempdirs . '/' . $file_name . '.php';
     }
     //Get the template file path
     protected function get_sourcefile_url($file_name)
     {
-        
-        return $get_sourcefile_url = (!empty($this->tempdirname)) ? $this->dirs . '/' . $this->tempdirname . '/' . $file_name . '.' . $this->        suffix : $this->dirs . '/' . $file_name . '.' . $this->suffix;
+        return  (!empty($this->tempdirname)) ? $this->dirs . '/' . $this->tempdirname . '/' . $file_name . '.' . $this->        suffix : $this->dirs . '/' . $file_name . '.' . $this->suffix;
     }
     //Determine whether to compile
     protected function is_compiled($source_url, $compiled_url)
