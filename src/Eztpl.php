@@ -7,7 +7,7 @@
  * Copyright to author hank all
  */
  
-namespace lovefc\extend;
+namespace src;
 define('EZTPL', true);
 class Eztpl
 {
