@@ -1,16 +1,14 @@
 <?php
 
 /**
- * Author: Hank
+ * Author: lovefc
  * Version: 1.6.7
  * Update time: 2017-5-11 15:51
- * Copyright to author Hank all
+ * Copyright to author lovefc all
  */
  
-namespace eztpl;
-
+namespace lovefc\extend;
 define('EZTPL', true);
-
 class Eztpl
 {
     public $eztpl_vars = array();
@@ -107,11 +105,11 @@ class Eztpl
     //The build process
     protected function compileds($source_url)
     {
-        $eztpl_left  = self::_quote($this->tplbegin);
-        $eztpl_right = self::_quote($this->tplend);
+        $lovefc_left  = self::_quote($this->tplbegin);
+        $lovefc_right = self::_quote($this->tplend);
         $content      = $this->place(file_get_contents($source_url));
         if (strpos($content, $this->tplbegin . 'include') !== false) {
-            $include_regular = '/' . $eztpl_left . 'include\s+file\s*=\s*["](.+?)["]' . $eztpl_right . '/i';
+            $include_regular = '/' . $lovefc_left . 'include\s+file\s*=\s*["](.+?)["]' . $lovefc_right . '/i';
             if (preg_match_all($include_regular, $content, $include_arr)) {
                 $include_arr[1] = array_unique($include_arr[1]);
                 foreach ($include_arr[1] as $key => $value) {
@@ -149,7 +147,7 @@ class Eztpl
             $else_rep = "<?php\r\n}else{\r\n?>";
             $content  = str_ireplace($else_end_regular, $else_rep, $content);
         }
-        $x_end_regular = '/' . $eztpl_left . '\/(if|for|foreach|while|end)' . $eztpl_right . '/i';
+        $x_end_regular = '/' . $lovefc_left . '\/(if|for|foreach|while|end)' . $lovefc_right . '/i';
         if (preg_match_all($x_end_regular, $content, $end_arr)) {
             $end_arr[0] = array_unique($end_arr[0]);
             foreach ($end_arr[0] as $key => $value) {
@@ -157,7 +155,7 @@ class Eztpl
             }
         }
         if (strpos($content, $this->tplbegin . 'if') !== false) {
-            $if_regular = '/' . $eztpl_left . 'if (.*)' . $eztpl_right . '/isU';
+            $if_regular = '/' . $lovefc_left . 'if (.*)' . $lovefc_right . '/isU';
             if (preg_match_all($if_regular, $content, $vars_arr)) {
                 foreach ($vars_arr[1] as $key => $value) {
                     $values  = $this->parse_vars($value);
@@ -166,7 +164,7 @@ class Eztpl
             }
         }
         if (strpos($content, $this->tplbegin . 'elseif') !== false) {
-            $elseif_regular = '/' . $eztpl_left . 'elseif (.*)' . $eztpl_right . '/isU';
+            $elseif_regular = '/' . $lovefc_left . 'elseif (.*)' . $lovefc_right . '/isU';
             if (preg_match_all($elseif_regular, $content, $vars_arr)) {
                 foreach ($vars_arr[1] as $key => $value) {
                     $values  = $this->parse_vars($value);
@@ -175,7 +173,7 @@ class Eztpl
             }
         }
         if (strpos($content, $this->tplbegin . 'foreach') !== false) {
-            $foreach_regular = '/' . $eztpl_left . 'foreach (.*)' . $eztpl_right . '/isU';
+            $foreach_regular = '/' . $lovefc_left . 'foreach (.*)' . $lovefc_right . '/isU';
             if (preg_match_all($foreach_regular, $content, $vars_arr)) {
                 foreach ($vars_arr[1] as $key => $value) {
                     if (strpos($value, ' as') === false)
@@ -186,7 +184,7 @@ class Eztpl
             }
         }
         if (strpos($content, $this->tplbegin . 'for') !== false) {
-            $for_regular = '/' . $eztpl_left . 'for (.*)' . $eztpl_right . '/isU';
+            $for_regular = '/' . $lovefc_left . 'for (.*)' . $lovefc_right . '/isU';
             if (preg_match_all($for_regular, $content, $vars_arr)) {
                 foreach ($vars_arr[1] as $key => $value) {
                     $values  = $this->parse_vars($value);
@@ -195,7 +193,7 @@ class Eztpl
             }
         }
         if (strpos($content, $this->tplbegin . 'while') !== false) {
-            $while_regular = '/' . $eztpl_left . 'while (.*)' . $eztpl_right . '/isU';
+            $while_regular = '/' . $lovefc_left . 'while (.*)' . $lovefc_right . '/isU';
             if (preg_match_all($while_regular, $content, $vars_arr)) {
                 foreach ($vars_arr[1] as $key => $value) {
                     $values  = $this->parse_vars($value);
@@ -203,21 +201,21 @@ class Eztpl
                 }
             }
         }
-        $assign_regular = '/' . $eztpl_left . '(((\$|\@)[\w\.\[\]\$]+)=\s*([\'"].+?[\'"]|.+?))' . $eztpl_right . '/';
+        $assign_regular = '/' . $lovefc_left . '(((\$|\@)[\w\.\[\]\$]+)=\s*([\'"].+?[\'"]|.+?))' . $lovefc_right . '/';
         if (preg_match_all($assign_regular, $content, $arr)) {
             foreach ($arr[0] as $key => $value) {
                 $rep     = '<?php ' . $this->parse_vars($arr[1][$key]) . '; ?>';
                 $content = str_replace($value, $rep, $content);
             }
         }
-        $varc_regular = '/' . $eztpl_left . '\!(.*)' . $eztpl_right . '/isU';
+        $varc_regular = '/' . $lovefc_left . '\!(.*)' . $lovefc_right . '/isU';
         if (preg_match_all($varc_regular, $content, $arr)) {
             foreach ($arr[1] as $key => $value) {
                 $values  = $this->parse_vars($value);
                 $content = str_replace($arr[0][$key], '<?php ' . $values . ';?>', $content);
             }
         }
-        $var_regular = '/' . $eztpl_left . '(.*)' . $eztpl_right . '/U';
+        $var_regular = '/' . $lovefc_left . '(.*)' . $lovefc_right . '/U';
         if (preg_match_all($var_regular, $content, $arr)) {
             foreach ($arr[1] as $key => $value) {
                 $values  = $this->parse_vars($value);
@@ -238,8 +236,8 @@ class Eztpl
     //end
     public function end()
     {
-        self::$eztpl = null;
-        unset(self::$eztpl);
+        self::$lovefc = null;
+        unset(self::$lovefc);
     }
     
     //cpu
@@ -334,7 +332,7 @@ class Eztpl
         );
         if (preg_match_all('/\$(\w+)\.(\w+)/', $content, $arr)) {
             foreach ($arr[2] as $key => $value) {
-                $content = preg_replace('/\.' . $value . '/', '[\'' . $value . '\']', $content, 1);
+                $content = preg_replace('/\.' . $value . '/', '[\'' . $value . '\']', $content);
             }
         }
         if (preg_match_all('/\$(\w+)/', $content, $vars_arr)) {
@@ -347,6 +345,7 @@ class Eztpl
                 $content = preg_replace('/' . self::_quote($value) . '/', $rep, $content, 1);
             }
         }
+
         $content = $this->parse_internal_var($content);
         return $content;
     }
@@ -355,15 +354,16 @@ class Eztpl
     {
         if (preg_match_all('/\@(\w+)\.(\w+)/', $content, $arr)) {
             foreach ($arr[2] as $key => $value) {
-                $content = preg_replace('/\.' . $value . '/', '[\'' . $value . '\']', $content, 1);
+                $content = preg_replace('/\.' . $value . '/', '[\'' . $value . '\']', $content);
             }
-        }
+        }				
         if (preg_match_all('/\@(\w+)/', $content, $vars_arr)) {
             foreach ($vars_arr[0] as $key => $value) {
                 $rep     = '$this->eztpl_vars[\'' . $vars_arr[1][$key] . '\']';
                 $content = preg_replace('/' . self::_quote($value) . '/', $rep, $content, 1);
             }
         }
+
         return $content;
     }
     
@@ -424,10 +424,10 @@ class Eztpl
         }
     }
 	
-    //error
+    //Error Show
     public function error($msg)
     {
-        throw new \Exception($message);
+        throw new \Exception($msg);
         //die($msg);
     }
 	
