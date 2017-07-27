@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Author: lovefc
+ * Author: hank
  * Version: 1.6.7
  * Update time: 2017-5-11 15:51
- * Copyright to author lovefc all
+ * Copyright to author hank all
  */
  
 namespace lovefc\extend;
