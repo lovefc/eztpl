@@ -7,7 +7,7 @@
  * Copyright to author hank all
  */
  
-namespace src;
+namespace eztpl;
 define('EZTPL', true);
 class Eztpl
 {
