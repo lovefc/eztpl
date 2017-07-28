@@ -1,16 +1,29 @@
 [inc(head)]
 <div class="jumbotron" style="background-color:#FBFCFE">
 <h1>Welcome Eztpl</h1>
+<br />
 <p>一个轻便，自由，高效，可以自由定义模板语法的php单文件模版引擎！</p>
-<p><a class="btn btn-default" href="#" role="button">向下阅读更多</a></p>
+<br />
+<p>
+<a class="btn btn-default" href="https://github.com/lovefc/eztpl.git" role="button" style="background-color:#000;color:#fff">Github</a>&nbsp;
+<a class="btn btn-success" href="https://git.coding.net/lovefc/eztpl.git" role="button" style="background-color:#9BDF70">Coding</a>&nbsp;
+<a class="btn btn-warning" href="https://git.oschina.net/lovefc/eztpl.git" role="button">码云</a>
+</p>
+<br />
+<button type="button" class="btn btn-default btn-block" style="background-color:#CEE3E9;">Composer.json</button>
+<pre>
+{
+    "require": {
+        "lovefc/eztpl": "1.6.8"
+    }		
+}
+</pre>
 </div>
-
 <div class="panel panel-primary">
 <div class="panel-heading">
 <h3 class="panel-title">输出实例</h3>
 </div>
 <div class="panel-body">
-
 {($a=123456)}
 输出:<b>{($a)}</b>
 
@@ -34,10 +47,11 @@
 </div>
 <div class="panel-body">
 <b>{(include file="a")}</b>
-<br />
+<br /><br />
 以上为引用a.html模板，除了可以引用模板，外部文件也可以引用的
 <br />
-例如
+<br />
+例如:
 <br />
 <br />
 <b>{(include file="./include.php")}</b>
@@ -61,8 +75,6 @@
 <br />
 <b>如果不是多维数组，可以用.号简写,
 $m.0等于$m[0],当然也可以用$m[0],多维数组就必须要用[]，比如$m[0][1]，不能写成$m.0.1</b>
-<br />
-<br />
 <br />
 <br />
 </div>
@@ -218,17 +230,3 @@ $m.0等于$m[0],当然也可以用$m[0],多维数组就必须要用[]，比如$m
 </div>
 
 [inc(foot)]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
