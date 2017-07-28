@@ -1,41 +1,45 @@
 <?php
-
-/**
- * Author: hank
- * Version: 1.6.7
- * Update time: 2017-5-11 15:51
- * Copyright to author hank all
- */
- 
 namespace eztpl;
 define('EZTPL', true);
+
+/**
+ * php单文件模版引擎 eztpl
+ * 作者: lovefc
+ * 版本: 1.6.8
+ * 最后更新: 2017/6/7 23:17:30
+ * Copyright to author lovefc all
+ */
+
 class Eztpl
 {
     public $eztpl_vars = array();
+    
     public static $eztpl;
+    
     protected $binds;
+    
     protected $instances;
     
-    //Get an instance
-    public static function instance($ObjName='default')
+    //获取单例
+    public static function instance($ObjName = 'default')
     {
         if (!isset(self::$eztpl[$ObjName]) || empty($ObjName)) {
-            $class        = __CLASS__;
-			$ObjName = empty($ObjName) ? 'default' : $ObjName;
+            $class                 = __CLASS__;
+            $ObjName               = empty($ObjName) ? 'default' : $ObjName;
             self::$eztpl[$ObjName] = new $class;
             return self::$eztpl[$ObjName];
-        }else{
-			return self::$eztpl[$ObjName];
-		}
+        } else {
+            return self::$eztpl[$ObjName];
+        }
     }
     
-    //__get () method is used to obtain private attributes
+    //用于获取私有属性
     public function __get($name)
     {
         return $this->$name = isset($this->$name) ? $this->$name : '';
     }
     
-    //Magic method used to create methods
+    //动态创建方法来给类变量赋值，例如$obj->setdirs('./templates');
     public function __call($method, $args)
     {
         $perfix   = substr($method, 0, 3);
@@ -49,7 +53,7 @@ class Eztpl
         return $this;
     }
     
-    //Initialization settings (array)
+    //初始化设置 (array)
     public function config($setting = null)
     {
         $this->charset     = (!empty($setting['charset'])) ? $setting['charset'] : null;
@@ -65,17 +69,18 @@ class Eztpl
         return $this;
     }
     
-    //Get the compiling file path
+    //获取缓存文件路径
     protected function get_compiledfile_url($file_name)
     {
-        return (!empty($this->tempdirname)) ? $this->tempdirs . '/' . $this->tempdirname . '/' . $file_name . '.php' :        $this->tempdirs . '/' . $file_name . '.php';
+        return (!empty($this->tempdirname)) ? $this->tempdirs . '/' . $this->tempdirname . '/' . $file_name . '.php' : $this->tempdirs . '/' . $file_name . '.php';
     }
-    //Get the template file path
+    //获取模版文件路径
     protected function get_sourcefile_url($file_name)
     {
-        return  (!empty($this->tempdirname)) ? $this->dirs . '/' . $this->tempdirname . '/' . $file_name . '.' . $this->        suffix : $this->dirs . '/' . $file_name . '.' . $this->suffix;
+        
+        return (!empty($this->tempdirname)) ? $this->dirs . '/' . $this->tempdirname . '/' . $file_name . '.' . $this->suffix : $this->dirs . '/' . $file_name . '.' . $this->suffix;
     }
-    //Determine whether to compile
+    //判断是否需要编译
     protected function is_compiled($source_url, $compiled_url)
     {
         if (!is_readable($source_url)) {
@@ -88,20 +93,20 @@ class Eztpl
             return true;
         }
     }
-    //Compile the template and write the file
+    //编译并写入到缓存
     protected function compile($source_url, $compiled_url)
     {
         if ($this->is_compiled($source_url, $compiled_url)) {
             $this->write_file($compiled_url, $this->compileds($source_url));
         }
     }
-    //Refer to the template file
+    //模版文件引入
     protected function includes($source_url, $compiled_url)
     {
         $this->compile($source_url, $compiled_url);
         return $compiled_url;
     }
-    //The build process
+    //编译过程
     protected function compileds($source_url)
     {
         $lovefc_left  = self::_quote($this->tplbegin);
@@ -126,7 +131,7 @@ class Eztpl
                     }
                     if ($compiled) {
                         if ($this->includeopen) {
-                            $regular = '<?php if($this->includes(\'' . $source . '\',' . '\'' . $compiled . '\')){ require(\'' . $compiled .                            '\'); } ?>';
+                            $regular = '<?php if($this->includes(\'' . $source . '\',' . '\'' . $compiled . '\')){ require(\'' . $compiled . '\'); } ?>';
                         } else {
                             $this->compile($source, $compiled);
                             $regular = "<?php\r\nrequire('{$compiled}');\r\n?>";
@@ -223,7 +228,7 @@ class Eztpl
         }
         return $content;
     }
-    //Output the template
+    //模版输出
     public function display($file_name)
     {
         $source_url   = $this->get_sourcefile_url($file_name);
@@ -232,28 +237,28 @@ class Eztpl
         $this->charset && header('Content-Type:text/html;charset=' . $this->charset);
         require($compiled_url);
     }
-    //end
+    //结束一个句柄
     public function end()
     {
         self::$lovefc = null;
         unset(self::$lovefc);
     }
     
-    //cpu
+    //获取cpu
     public static function cpu()
     {
         $memory = (!function_exists('memory_get_usage')) ? '0' : round(memory_get_usage() / 1024 / 1024, 5);
         return $memory;
     }
     
-    //Read the contents of the template
+    //获取模版内容
     protected function get_contents($source_url)
     {
         $content = file_get_contents($source_url);
         return $content;
     }
     
-    //Template additional transformation
+    //自定义的正则编译
     protected function place($content)
     {
         if (is_array($this->instances) && count($this->instances) >= 1) {
@@ -272,7 +277,7 @@ class Eztpl
         return $content;
     }
     
-    //Classified parameters
+    //参数绑定判断
     public function binds($abstract, $concrete)
     {
         if ($concrete instanceof \Closure) {
@@ -282,7 +287,7 @@ class Eztpl
         }
     }
     
-    //Binding parameters
+    //参数绑定
     public function bind($abstract, $concrete = ' ')
     {
         if (is_array($abstract)) {
@@ -294,7 +299,7 @@ class Eztpl
         }
     }
     
-    //The incoming variables
+    //模版变量赋值
     public function assign($vars, $values = null)
     {
         if (is_array($vars)) {
@@ -311,12 +316,14 @@ class Eztpl
             }
         }
     }
-    //Escape a string
+    
+    //正则字符串转义
     protected static function _quote($val)
     {
         return preg_quote($val, '/');
     }
-    //Variable substitution
+    
+    //变量解析
     protected function parse_vars($content)
     {
         $vars = array(
@@ -344,34 +351,30 @@ class Eztpl
                 $content = preg_replace('/' . self::_quote($value) . '/', $rep, $content, 1);
             }
         }
-
+        
         $content = $this->parse_internal_var($content);
         return $content;
     }
-    //Internal variable substitution
+    
+    //内部变量解析
     protected function parse_internal_var($content)
     {
         if (preg_match_all('/\@(\w+)\.(\w+)/', $content, $arr)) {
             foreach ($arr[2] as $key => $value) {
                 $content = preg_replace('/\.' . $value . '/', '[\'' . $value . '\']', $content);
             }
-        }				
+        }
         if (preg_match_all('/\@(\w+)/', $content, $vars_arr)) {
             foreach ($vars_arr[0] as $key => $value) {
                 $rep     = '$this->eztpl_vars[\'' . $vars_arr[1][$key] . '\']';
                 $content = preg_replace('/' . self::_quote($value) . '/', $rep, $content, 1);
             }
         }
-
+        
         return $content;
     }
     
-    /**
-     * create a multi-level file or a directory
-     * $dir file or directory name
-     * $false is set to true if it is a file
-     * file or directory permissions
-     */
+    //创建目录或者文件
     public function createdir($dir, $file = false, $mode = 0775)
     {
         
@@ -402,7 +405,7 @@ class Eztpl
             return true;
     }
     
-    //Written to the file
+    //写入缓存
     protected function write_file($path, $content)
     {
         $compiled_url = $path;
@@ -413,24 +416,19 @@ class Eztpl
         file_put_contents($path, $content);
     }
     
-    //The output message
+    //消息输出或者跳转
     protected function show_messages($message = null)
     {
         if ($this->errorurl != null) {
             header('Location: ' . $this->errorurl);
         } else {
-            throw new \Exception($message);
+            $this->error($message);
         }
     }
-	
-    //Error Show
-    public function error($msg)
+    
+    //错误输出
+    public function error($message)
     {
-        throw new \Exception($msg);
-        //die($msg);
+        throw new \Exception($message);
     }
-	
-    /**
-     * this class ends here
-     */
 }

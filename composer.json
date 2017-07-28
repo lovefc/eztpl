@@ -2,7 +2,7 @@
     "name": "eztpl/eztpl",
     "description": "A small, efficient PHP single-file template engine",
     "keywords": ["php","template"],
-    "version": "1.6.7",
+    "version": "1.6.8",
     "homepage": "https://github.com/eztpl/eztpl.git",
     "license": "MIT",
     "require": {
@@ -10,8 +10,8 @@
     },
     "authors": [
       {
-        "name": "eztpl",
-        "email": "admin@eztpl.com",
+        "name": "lovefc",
+        "email": "1102952084@qq.com",
         "homepage": "http://eztpl.com",
         "role": "Developer"
       }

@@ -1,101 +1,92 @@
-﻿<?php
+<?php
 
 /**
- * author:Hank
+ * author:lovefc
  * by Eztpl
  *
  */
 
-// Define error report
+//定义错误报告
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
-// Refer to the class file
+//引用类文件
 require('./src/Eztpl.php');
 
-
 $setting = array(
-    // left locator
+    //左定位符
     'tplbegin' => '{(',
-    
-    // right locator
+	
+    //右定位符   
     'tplend' => ')}',
-    
-    // template file suffixes
-    'suffix' => 'HTML',
-    
-    // template character encoding
+
+    //模版文件后缀   
+	'suffix' =>'html',	
+	
+    //模版字符编码   
     'charset' => 'utf-8',
-    
-    // template file for directory, please be aware that you must have read and write permissions
+
+    //模版文件存放目录,请注意要有读写的权限    
     'dirs' => './templates',
-    
-    // compile files for directories, please note that you must have read and write permissions
+
+     //编译文件存放目录,请注意要有读写的权限   
     'tempdirs' => './templates_c',
-    
-    // the template does not exist, the address that needs to jump, the default will prompt a warning, relative path, absolute path
+
+    //模板不存在,需要跳转的地址，默认会提示一句警告,相对路径，绝对路径皆可    
     'errorurl' => '',
-    
-    // subdirectory name under the template directory
+
+    //模版目录下的子目录名    
     'tempdirname' => '',
-    
-    // forced compiled page, the use of debugging, each time, template file will be forced to compile, true to open, 
-    //false to shut down, off by default, such as open, consumption of resources
+
+     //强制编译页面,调试时使用,每次执行,模版文件将会强制编译,true为开启，false为关闭，默认关闭,此项不可随意开启,太消耗资源   
     'tempopen' => false,
-    
-    // define template references, for true to be compiled in real time, and when the template file changes, 
-    //the file that references this template file will be recompiled
-    // the drawback is that the efficiency drops, but the benefit is that you don't have to modify the template file 
-    //that contains the template file to recompile it
-    // false to shut down, the default open, if sure templates don't need to change, you can delete all compiled file
-    //close the,can accelerate the speed of the program
+	
+    //定义模版引用方式,为true则采用实时编译，当模板文件改变，引用此模板文件的文件将进行重新编译
+    //缺点，效率有所下降，好处是不必一一修改包含此模板文件的模板文件，使其重新编译
+    //false为关闭,默认开启,如果确定模版不需要在改变,可以删除所有编译文件后,关闭此项,可加快程序的运行速度   
     'includeopen' => true
 );
 
-try {
+try{
+	
+//获取单例
+$obj = eztpl\Eztpl::instance();
+
+//传入配置
+$obj->config($setting);
+
+//正则关系，一一对应，键名为正则，键值为要替换的值，可以是字符串或者是匿名函数，可以写模版代码，会进行二次编译
+$preg = array(
+    '#\[\@(.*)\]#isuU' => '{(if isset(@\\1))}{(@\\1)}{(/if)}',
+			
+    '#\[\$(.*)\]#isuU' => '{(if isset($\\1))}{($\\1)}{(/if)}',	
+	
+    '#\[inc\((.*)\)\]#isuU' => '{(include file="\\1")}',
     
-    // get a singleton
-    $obj = eztpl\Eztpl::instance();
+    '#\[md5\((.*)\)\]#isuU' => function($m)
+    {
+        return md5($m[1]);
+    },
     
-    // To configure
-    $obj->config($setting);
+    '#\[list="(.*)"\]([\w\W]+?)\[\/list\]#' => '{(if isset(\\1))}{(foreach \\1)}\\2{(/foreach)}{(/if)}',
     
-    
-    // Called regular regular relationship, one to one correspondence, key, 
-	// keys to replace the value, can be a string or anonymous functions, you can write the template code, will be the second compilation
-    $preg = array(
-        '#\[\@(.*)\]#isuU' => '{(if isset(@\\1))}{(@\\1)}{(/if)}',
-        
-        '#\[\$(.*)\]#isuU' => '{(if isset($\\1))}{($\\1)}{(/if)}',
-        
-        '#\[inc\((.*)\)\]#isuU' => '{(include file="\\1")}',
-        
-        '#\[md5\((.*)\)\]#isuU' => function($m)
-        {
-            return md5($m[1]);
-        },
-        
-        '#\[list="(.*)"\]([\w\W]+?)\[\/list\]#' => '{(if isset(\\1))}{(foreach \\1)}\\2{(/foreach)}{(/if)}',
-        
-        '#\[time\]#' => '{(date("Y-m-d H:i"))}'
-    );
-    
-    // Match the regular binding
-    $obj->bind($preg);
-    
-    // If you want to change a setting in the middle, you can use the magic method set class variable name for setting
-    $obj->settempopen(true); // Change to mandatory compilation
-    
-    $world = 'hello world';
-    
-    // To value within the template, which can be used in the template “hello” on behalf of the variable name in the template, 
-	// in order to   better distinguish between variables, all the external variables into use to get the @ symbol
-    $obj->assign('hello', $world);
-    
-    // Compile the template to generate the cache
-    $obj->display('index');
-    
-}
-catch (\Exception $e) {
+    '#\[time\]#' => '{(date("Y-m-d H:i"))}'
+);
+
+//匹配正则绑定
+$obj->bind($preg);
+
+//如果想要中途改变一项设置可以使用魔术方法set类变量名来进行设置
+$obj->settempopen(true); //更改为强制编译
+
+$world = 'hello world';
+
+//传值，可以在模板中使用,hello代表在模板中的变量名称，为了更好的区分变量，所有的外部转入的变量都用@符号来获取
+$obj->assign('hello', $world);
+
+//编译模板,生成缓存
+$obj->display('index');  
+
+}catch (\Exception $e) {
     
     die($e->getMessage());
     

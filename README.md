@@ -1,24 +1,28 @@
 ![](http://www.eztpl.com/eztpl.png)
 
-A very small PHP template engine class library.
+一个小巧的PHP模板引擎类库
 
-Quick usage, easy syntax, very efficient, free to define template syntax, only one file at the core!
+演示地址：[http://demo.eztpl.com](http://demo.eztpl.com)
 
-If you notice compliance oversights, please send a patch.
+
+简单的语法，自由地定义模板语法，一个核心文件！
+
+如果您注意到一些被疏忽的问题，欢迎把它提交给我！
+
 
 # Composer
 
 ```
 {
     "require": {
-        "eztpl/eztpl": "1.6.7"
+        "eztpl/eztpl": "1.6.8"
     }		
 }
 ```
 
 # Requirements
 
-The following versions of PHP are supported by this version.
+这个版本支持下面的PHP版本。
 
 * PHP 5.4
 
@@ -32,3 +36,17 @@ The following versions of PHP are supported by this version.
 # License
 
 The MIT License (MIT). Please see [License File](https://github.com/thephpleague/route/blob/master/LICENSE.md) for more information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+

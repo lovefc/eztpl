@@ -1,2 +1,2 @@
 <?php
-echo "I'm the code in the include.php file";
+echo "我是include里面的文件";
