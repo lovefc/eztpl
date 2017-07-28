@@ -2,7 +2,7 @@
 
 一个小巧的PHP模板引擎类库
 
-演示地址：[http://demo.eztpl.com](http://demo.eztpl.com)
+演示地址：[http://eztpl.com](http://eztpl.com)
 
 
 简单的语法，自由地定义模板语法，一个核心文件！
