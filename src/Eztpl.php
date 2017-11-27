@@ -4,7 +4,7 @@
  * php单文件模版引擎 eztpl
  * 作者: lovefc
  * 版本: 1.6.8
- * 最后更新: 2017/6/7 23:17:30
+ * 最后更新: 2017-8-29 09:30
  * Copyright to author lovefc all
  */
  
