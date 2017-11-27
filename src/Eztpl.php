@@ -1,6 +1,4 @@
 <?php
-namespace eztpl;
-define('EZTPL', true);
 
 /**
  * php单文件模版引擎 eztpl
@@ -9,23 +7,24 @@ define('EZTPL', true);
  * 最后更新: 2017/6/7 23:17:30
  * Copyright to author lovefc all
  */
+ 
+namespace fcphp\extend;
+
+define('EZTPL', true);
 
 class Eztpl
 {
     public $eztpl_vars = array();
-    
     public static $eztpl;
-    
     protected $binds;
-    
     protected $instances;
     
     //获取单例
-    public static function instance($ObjName = 'default')
+    public static function instance($ObjName='default')
     {
         if (!isset(self::$eztpl[$ObjName]) || empty($ObjName)) {
-            $class                 = __CLASS__;
-            $ObjName               = empty($ObjName) ? 'default' : $ObjName;
+            $class        = __CLASS__;
+            $ObjName = empty($ObjName) ? 'default' : $ObjName;
             self::$eztpl[$ObjName] = new $class;
             return self::$eztpl[$ObjName];
         } else {
@@ -39,7 +38,7 @@ class Eztpl
         return $this->$name = isset($this->$name) ? $this->$name : '';
     }
     
-    //动态创建方法来给类变量赋值，例如$obj->setdirs('./templates');
+    //创建方法
     public function __call($method, $args)
     {
         $perfix   = substr($method, 0, 3);
@@ -72,13 +71,12 @@ class Eztpl
     //获取缓存文件路径
     protected function get_compiledfile_url($file_name)
     {
-        return (!empty($this->tempdirname)) ? $this->tempdirs . '/' . $this->tempdirname . '/' . $file_name . '.php' : $this->tempdirs . '/' . $file_name . '.php';
+        return (!empty($this->tempdirname)) ? $this->tempdirs . '/' . $this->tempdirname . '/' . $file_name . '.php' :        $this->tempdirs . '/' . $file_name . '.php';
     }
     //获取模版文件路径
     protected function get_sourcefile_url($file_name)
     {
-        
-        return (!empty($this->tempdirname)) ? $this->dirs . '/' . $this->tempdirname . '/' . $file_name . '.' . $this->suffix : $this->dirs . '/' . $file_name . '.' . $this->suffix;
+        return (!empty($this->tempdirname)) ? $this->dirs . '/' . $this->tempdirname . '/' . $file_name . '.' . $this->        suffix : $this->dirs . '/' . $file_name . '.' . $this->suffix;
     }
     //判断是否需要编译
     protected function is_compiled($source_url, $compiled_url)
@@ -86,7 +84,7 @@ class Eztpl
         if (!is_readable($source_url)) {
             $this->show_messages('Template file not readable to ' . $source_url);
         }
-        if ($this->tempopen or !is_file($compiled_url)) {
+        if ($this->tempopen || !is_file($compiled_url)) {
             return true;
         }
         if (filemtime($source_url) > filemtime($compiled_url)) {
@@ -111,7 +109,7 @@ class Eztpl
     {
         $lovefc_left  = self::_quote($this->tplbegin);
         $lovefc_right = self::_quote($this->tplend);
-        $content      = $this->place(file_get_contents($source_url));
+        $content      = $this->place($this->get_contents($source_url));
         if (strpos($content, $this->tplbegin . 'include') !== false) {
             $include_regular = '/' . $lovefc_left . 'include\s+file\s*=\s*["](.+?)["]' . $lovefc_right . '/i';
             if (preg_match_all($include_regular, $content, $include_arr)) {
@@ -131,16 +129,17 @@ class Eztpl
                     }
                     if ($compiled) {
                         if ($this->includeopen) {
-                            $regular = '<?php if($this->includes(\'' . $source . '\',' . '\'' . $compiled . '\')){ require(\'' . $compiled . '\'); } ?>';
+                            $regular = '<?php if($this->includes(\'' . $source . '\',' . '\'' . $compiled . '\')){ require(\'' . $compiled .                            '\'); } ?>';
                         } else {
                             $this->compile($source, $compiled);
                             $regular = "<?php\r\nrequire('{$compiled}');\r\n?>";
                         }
                     } else {
-                        if (is_file($value))
+                        if (is_file($value)) {
                             $regular = "<?php\r\nrequire('{$value}');\r\n?>";
-                        else
+                        } else {
                             $regular = null;
+                        }
                     }
                     $content = str_ireplace($str, $regular, $content);
                 }
@@ -180,8 +179,9 @@ class Eztpl
             $foreach_regular = '/' . $lovefc_left . 'foreach (.*)' . $lovefc_right . '/isU';
             if (preg_match_all($foreach_regular, $content, $vars_arr)) {
                 foreach ($vars_arr[1] as $key => $value) {
-                    if (strpos($value, ' as') === false)
+                    if (strpos($value, ' as') === false) {
                         $value .= ' as $key=>$value';
+                    }
                     $values  = $this->parse_vars($value);
                     $content = str_replace($vars_arr[0][$key], '<?php foreach(' . $values . '){ ?>', $content);
                 }
@@ -304,25 +304,25 @@ class Eztpl
     {
         if (is_array($vars)) {
             foreach ($vars as $key => $val) {
-                if ($key != null)
+                if ($key != null) {
                     $this->eztpl_vars[$key] = $val;
+                }
             }
         } else {
             if ($vars != null) {
-                if ($values != null)
+                if ($values != null) {
                     $this->eztpl_vars[$vars] = $values;
-                else
+                } else {
                     $this->eztpl_vars['var'] = $vars;
+                }
             }
         }
     }
-    
-    //正则字符串转义
+    //转义
     protected static function _quote($val)
     {
         return preg_quote($val, '/');
     }
-    
     //变量解析
     protected function parse_vars($content)
     {
@@ -351,11 +351,10 @@ class Eztpl
                 $content = preg_replace('/' . self::_quote($value) . '/', $rep, $content, 1);
             }
         }
-        
+
         $content = $this->parse_internal_var($content);
         return $content;
     }
-    
     //内部变量解析
     protected function parse_internal_var($content)
     {
@@ -370,53 +369,60 @@ class Eztpl
                 $content = preg_replace('/' . self::_quote($value) . '/', $rep, $content, 1);
             }
         }
-        
+
         return $content;
     }
     
-    //创建目录或者文件
-    public function createdir($dir, $file = false, $mode = 0775)
+    /**
+     * 创建一个文件或者目录
+     * @param $dir 目录名或者文件名
+     * @param $file 如果是文件，则设为true
+     * @param $mode 文件的权限
+     * @return false|true
+     */
+    public function create($dir, $file = false, $mode = 0777)
     {
-        
         $path = str_replace("\\", "/", $dir);
-        if (is_dir($path) && $file == false)
-            return true;
         if ($file) {
-            if (is_file($path))
+            if (is_file($path)) {
                 return true;
+            }
             $temp_arr = explode('/', $path);
             array_pop($temp_arr);
-            $path2 = implode('/', $temp_arr);
+            $file = $path;
+            $path = implode('/', $temp_arr);
         }
-        $mdir = isset($path2) ? $path2 : $path;
-        if (!is_dir($mdir)) {
-            @mkdir($mdir, $mode, true);
-            @chmod($mdir, $mode);
+        if (!is_dir($path)) {
+            @mkdir($path, $mode, true);
+        } else {
+            @chmod($path, $mode);
         }
-        
         if ($file) {
-            $fh = @fopen($path, 'a');
+            $fh = @fopen($file, 'a');
             if ($fh) {
                 fclose($fh);
                 return true;
             }
         }
-        if (is_dir($dir))
+        if (is_dir($path)) {
             return true;
+        }
+        return false;
     }
     
     //写入缓存
     protected function write_file($path, $content)
     {
         $compiled_url = $path;
-        if ($this->createdir($compiled_url, true) == false && is_readable($compiled_url) == false) {
+        $this->create($compiled_url, true);
+        if (is_readable($compiled_url) == false) {
             $this->error('Warning: file generation fails, check permissions to' . $compiled_url);
         }
         $content = "<?php\r\n if(!defined('EZTPL')){\r\n die('Forbidden access');\r\n}\r\n?>\r\n" . $content;
-        file_put_contents($path, $content);
+        file_put_contents($path, $content, LOCK_EX);
     }
     
-    //消息输出或者跳转
+    //消息输出
     protected function show_messages($message = null)
     {
         if ($this->errorurl != null) {
@@ -431,4 +437,7 @@ class Eztpl
     {
         throw new \Exception($message);
     }
+    /**
+     * this class ends here
+     */
 }
