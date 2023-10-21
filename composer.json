@@ -1,8 +1,8 @@
 {
     "name": "lovefc/eztpl",
-    "description": "A small, efficient PHP single-file template engine",
+    "description": "一个小型高效的PHP单文件模板引擎",
     "keywords": ["php","template"],
-    "version": "1.6.8",
+    "version": "1.7.0",
     "homepage": "https://github.com/lovefc/eztpl.git",
     "license": "MIT",
     "require": {
@@ -11,12 +11,10 @@
     "authors": [
       {
         "name": "lovefc",
-        "email": "1102952084@qq.com",
-        "homepage": "http://eztpl.com",
-        "role": "Developer"
+        "homepage": "http://lovefc.cn",
       }
     ],
 	"autoload": {
-	   "psr-4": { "eztpl\\": "src"}
+	   "psr-4": { "lovefc\\": "src"}
 	}
 }
