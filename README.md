@@ -13,7 +13,7 @@
 ```
 {
     "require": {
-        "lovefc/eztpl": "1.6.9"
+        "lovefc/eztpl": "1.7.0"
     }		
 }
 ```
